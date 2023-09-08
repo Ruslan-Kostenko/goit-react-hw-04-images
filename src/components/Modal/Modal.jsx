@@ -48,7 +48,7 @@ export const CustomModal = ({
         onLoad={onLoad}
         onError={onError}
         src={image}
-        alt=""
+        alt="Description of the image"
         $isLoadingImage={isLoadingImage}
       />
     </Modal>

@@ -1,58 +1,40 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { GalleryListImage } from './ImageGalleryItem.styled';
 import { CustomModal } from 'components/Modal/Modal';
 
-export class ImageGalleryItem extends Component {
-  state = {
-    isModalOpen: false,
-    isLoadingImage: false,
+export const ImageGalleryItem = ({ image }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+    setIsLoadingImage(true);
   };
 
-  openModal = () => {
-    this.setState({
-      isModalOpen: true,
-      isLoadingImage: true,
-    });
-  };
+  const closeModal = () => setIsModalOpen(false);
 
-  closeModal = () => {
-    this.setState({
-      isModalOpen: false,
-    });
-  };
+  const handleImageLoad = () => setIsLoadingImage(false);
 
-  handleImageLoad = () => {
-    this.setState({
-      isLoadingImage: false,
-    });
-  };
-
-  handleImageError = () => {
-    this.setState({
-      isLoadingImage: false,
-    });
+  const handleImageError = () => {
+    setIsLoadingImage(false);
     console.error('Error loading image');
   };
 
-  render() {
-    const { image } = this.props;
-    const { isLoadingImage, isModalOpen } = this.state;
-    return (
-      <>
-        <GalleryListImage
-          onClick={this.openModal}
-          src={image.webformatURL}
-          alt=""
-        ></GalleryListImage>
-        <CustomModal
-          isOpen={isModalOpen}
-          onModalClose={this.closeModal}
-          isLoadingImage={isLoadingImage}
-          image={image.largeImageURL}
-          afterOpen={this.afterOpen}
-          onLoad={this.handleImageLoad}
-        />
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <GalleryListImage
+        onClick={openModal}
+        src={image.webformatURL}
+        alt="Description of the image"
+      ></GalleryListImage>
+      <CustomModal
+        isOpen={isModalOpen}
+        onModalClose={closeModal}
+        isLoadingImage={isLoadingImage}
+        image={image.largeImageURL}
+        onError={handleImageError}
+        onLoad={handleImageLoad}
+      />
+    </>
+  );
+};
